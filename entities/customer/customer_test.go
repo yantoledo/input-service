@@ -7,7 +7,6 @@ import (
 )
 
 func TestCustomerWithoutName(t *testing.T) {
-	//Without Name
 	customer := NewCustomer()
 	customer.Name = ""
 	customer.UniqueID = 123456
