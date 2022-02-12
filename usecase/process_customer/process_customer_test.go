@@ -3,7 +3,6 @@ package process_customer
 import (
 	"testing"
 
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	service "github.com/yantoledo/input-service/infra/service/customer_service"
 )
@@ -20,9 +19,6 @@ func TestProcessCustomerWhenItIsValid(t *testing.T) {
 		IdCustomer:     1,
 		UniqueClientID: 1234,
 	}
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
 
 	serviceMock := service.NewCustomerServiceMock()
 
