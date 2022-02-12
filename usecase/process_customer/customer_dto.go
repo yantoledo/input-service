@@ -1,13 +1,13 @@
 package process_customer
 
 type CustomerDtoInput struct {
-	Name           string
-	UniqueID       int
-	UniqueClientID int
-	Source         int
+	Name           string `json:"name"`
+	UniqueID       int    `json:"unique_id"`
+	UniqueClientID int    `json:"unique_client_id"`
+	Source         int    `json:"source"`
 }
 
 type CustomerDtoOutput struct {
-	UniqueID       int
-	UniqueClientID int
+	idCustomer     int `json:"unique_id"`
+	UniqueClientID int `json:"unique_client_id"`
 }

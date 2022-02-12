@@ -3,16 +3,16 @@ package process_customer
 import (
 	"errors"
 
-	"github.com/yantoledo/input-service/entity"
 	"github.com/yantoledo/input-service/entity/customer"
+	service "github.com/yantoledo/input-service/infra/service/customer_service"
 )
 
 type ProcessCustomer struct {
-	Repository entity.CustomerRepository
+	Service service.CustomerServiceInterface
 }
 
-func NewProcessCustomer(repository entity.CustomerRepository) *ProcessCustomer {
-	return &ProcessCustomer{Repository: repository}
+func NewProcessCustomer(service service.CustomerServiceInterface) *ProcessCustomer {
+	return &ProcessCustomer{Service: service}
 }
 
 func (p *ProcessCustomer) Execute(input CustomerDtoInput) (CustomerDtoOutput, error) {
@@ -29,13 +29,13 @@ func (p *ProcessCustomer) Execute(input CustomerDtoInput) (CustomerDtoOutput, er
 		return CustomerDtoOutput{}, errors.New("Customer invalid")
 	}
 
-	err := p.Repository.Insert(customer.Name, customer.UniqueID, customer.UniqueClientID, customer.Source)
-	if err != nil {
+	idCustomer, err := p.Service.Insert(customer)
+	if err != nil || idCustomer == 0 {
 		return CustomerDtoOutput{}, errors.New("Customer's insert error")
 	}
 
 	output := CustomerDtoOutput{
-		UniqueID:       customer.UniqueID,
+		idCustomer:     idCustomer,
 		UniqueClientID: customer.UniqueClientID,
 	}
 
