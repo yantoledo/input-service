@@ -35,7 +35,7 @@ func (p *ProcessCustomer) Execute(input CustomerDtoInput) (CustomerDtoOutput, er
 	}
 
 	output := CustomerDtoOutput{
-		idCustomer:     idCustomer,
+		IdCustomer:     idCustomer,
 		UniqueClientID: customer.UniqueClientID,
 	}
 

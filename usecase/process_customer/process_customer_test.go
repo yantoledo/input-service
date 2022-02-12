@@ -17,7 +17,7 @@ func TestProcessCustomerWhenItIsValid(t *testing.T) {
 	}
 
 	expectedOutput := CustomerDtoOutput{
-		idCustomer:     1,
+		IdCustomer:     1,
 		UniqueClientID: 1234,
 	}
 
