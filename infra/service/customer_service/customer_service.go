@@ -23,7 +23,7 @@ func (c *CustomerService) Insert(customer *customer.Customer) (int, error) {
 	header := c.GetHeader()
 	client := &http.Client{}
 	response, err := httpService.Post(url, customer, header, client)
-	fmt.Println(response)
+	fmt.Println(response) //TODO: Remove
 	if err != nil {
 		return 0, err
 	}
