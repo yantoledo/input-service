@@ -9,6 +9,7 @@ import (
 type Message struct {
 	Text     string
 	Type     string
+	MediaUrl string
 	Customer customer.Customer
 }
 
