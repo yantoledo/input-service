@@ -3,12 +3,13 @@ package message
 import (
 	"errors"
 
-	"github.com/yantoledo/input-service/entities/customer"
+	"github.com/yantoledo/input-service/entity/customer"
 )
 
 type Message struct {
 	Text     string
 	Type     string
+	MediaUrl string
 	Customer customer.Customer
 }
 
