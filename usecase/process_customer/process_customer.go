@@ -26,12 +26,12 @@ func (p *ProcessCustomer) Execute(input CustomerDtoInput) (CustomerDtoOutput, er
 	invalidCustomer := customer.IsValid()
 
 	if invalidCustomer != nil {
-		return CustomerDtoOutput{}, errors.New("Customer invalid")
+		return CustomerDtoOutput{}, errors.New("Invalid Customer")
 	}
 
 	idCustomer, err := p.Service.Insert(customer)
 	if err != nil || idCustomer == 0 {
-		return CustomerDtoOutput{}, errors.New("Customer's insert error")
+		return CustomerDtoOutput{}, errors.New("Customer insert error")
 	}
 
 	output := CustomerDtoOutput{
