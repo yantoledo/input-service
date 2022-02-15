@@ -2,6 +2,6 @@ package http_protocol
 
 import "net/http"
 
-type HttpClient interface {
-	Do(req *http.Request) (*http.Response, error)
+type HttpClientProvider interface {
+	Do(request *http.Request) (*http.Response, error)
 }

@@ -3,10 +3,10 @@ package customer
 import "errors"
 
 type Customer struct {
-	Name           string
-	UniqueID       int
-	UniqueClientID int
-	Source         int
+	Name           string `json:"name"`
+	UniqueID       int    `json:"unique_id"`
+	UniqueClientID int    `json:"unique_client_id"`
+	Source         int    `json:"source"`
 }
 
 func NewCustomer() *Customer {
