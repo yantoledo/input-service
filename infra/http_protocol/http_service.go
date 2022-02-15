@@ -2,27 +2,53 @@ package http_protocol
 
 import (
 	"bytes"
-	"encoding/json"
+	"io/ioutil"
 	"net/http"
 )
 
 type HttpService struct {
+	http HttpClientProvider
 }
 
-func NewHttpService() *HttpService {
-	return &HttpService{}
+func NewHttpService() HttpService {
+	return HttpService{http: &http.Client{}}
 }
 
-func (h *HttpService) Post(url string, body interface{}, headers http.Header, client HttpClient) (*http.Response, error) {
-	jsonBytes, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
+func (h HttpService) Post(request HTTPRequest) (HTTPResponse, error) {
+	if request.Headers == nil {
+		request.Headers = make(map[string]string)
 	}
-	request, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(jsonBytes))
+	request.Headers["content-type"] = "application/json"
+	return h.processRequest("POST", request)
+}
+
+func (h HttpService) processRequest(method string, request HTTPRequest) (HTTPResponse, error) {
+	httpRequest, err := http.NewRequest(method, request.URL, bytes.NewBuffer(request.Body))
 	if err != nil {
-		return nil, err
+		return HTTPResponse{}, err
 	}
-	request.Header = headers
-	// client := &http.Client{}
-	return client.Do(request)
+
+	for key, value := range request.Headers {
+		httpRequest.Header.Add(key, value)
+	}
+
+	return processResponse(h.http.Do(httpRequest))
+}
+
+func processResponse(resp *http.Response, err error) (HTTPResponse, error) {
+	var result HTTPResponse
+
+	if err != nil {
+		return result, err
+	}
+
+	defer resp.Body.Close()
+	result.Body, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return result, err
+	}
+
+	result.StatusCode = resp.StatusCode
+
+	return result, nil
 }
