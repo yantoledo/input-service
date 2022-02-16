@@ -1,4 +1,4 @@
-package process_message
+package usecase
 
 import (
 	"testing"

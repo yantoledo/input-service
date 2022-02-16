@@ -1,4 +1,4 @@
-package process_message
+package usecase
 
 import "github.com/yantoledo/input-service/entity/customer"
 
