@@ -1,4 +1,4 @@
-package process_customer
+package usecase
 
 import (
 	"errors"
@@ -18,7 +18,7 @@ func NewProcessCustomer(service service.CustomerServiceInterface) *ProcessCustom
 func (p *ProcessCustomer) Execute(input CustomerDtoInput) (CustomerDtoOutput, error) {
 
 	customer := customer.NewCustomer()
-	customer.Name = input.Name
+	customer.Name = "Input"
 	customer.UniqueID = input.UniqueID
 	customer.UniqueClientID = input.UniqueClientID
 	customer.Source = input.Source
@@ -29,15 +29,16 @@ func (p *ProcessCustomer) Execute(input CustomerDtoInput) (CustomerDtoOutput, er
 		return CustomerDtoOutput{}, errors.New("Invalid Customer")
 	}
 
-	idCustomer, err := p.Service.Insert(customer)
-	if err != nil || idCustomer == 0 {
+	service_response, err := p.Service.Insert(customer)
+	if err != nil || service_response.IdCustomer == 0 {
 		return CustomerDtoOutput{}, errors.New("Customer insert error")
 	}
 
-	output := CustomerDtoOutput{
-		IdCustomer:     idCustomer,
-		UniqueClientID: customer.UniqueClientID,
+	dtoOutput := CustomerDtoOutput{
+		IdCustomer:     service_response.IdCustomer,
+		Name:           service_response.Name,
+		UniqueClientID: service_response.UniqueClientID,
 	}
 
-	return output, nil
+	return dtoOutput, nil
 }

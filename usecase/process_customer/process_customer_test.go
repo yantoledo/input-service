@@ -1,4 +1,4 @@
-package process_customer
+package usecase
 
 import (
 	"testing"
@@ -9,15 +9,15 @@ import (
 
 func TestProcessCustomerWhenItIsValid(t *testing.T) {
 	input := CustomerDtoInput{
-		Name:           "John Lock",
 		UniqueID:       1234,
 		UniqueClientID: 1234,
 		Source:         1,
 	}
 
 	expectedOutput := CustomerDtoOutput{
+		Name:           "John Lock",
 		IdCustomer:     1,
-		UniqueClientID: 1234,
+		UniqueClientID: 12345,
 	}
 
 	serviceMock := service.NewCustomerServiceMock()
