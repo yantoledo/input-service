@@ -5,5 +5,5 @@ import (
 )
 
 type CustomerServiceInterface interface {
-	Insert(customer *customer.Customer) (int, error)
+	Insert(customer *customer.Customer) (CustomerServiceOutput, error)
 }

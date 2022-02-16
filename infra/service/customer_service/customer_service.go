@@ -15,11 +15,11 @@ func NewCustomerService() *CustomerService {
 	return &CustomerService{}
 }
 
-func (c *CustomerService) Insert(customer *customer.Customer) (int, error) {
+func (c *CustomerService) Insert(customer *customer.Customer) (CustomerServiceOutput, error) {
 	body, err := json.Marshal(customer)
 
 	if err != nil {
-		return 0, err
+		return CustomerServiceOutput{}, err
 	}
 
 	httpService := http_protocol.NewHttpService()
@@ -30,8 +30,14 @@ func (c *CustomerService) Insert(customer *customer.Customer) (int, error) {
 	})
 	fmt.Println(res) //TODO: Removes after
 	if err != nil {
-		return 0, err
+		return CustomerServiceOutput{}, err
 	}
 
-	return 1, nil //TODO: We must return idCustomer from response body
+	output := CustomerServiceOutput{
+		IdCustomer:     1, //TODO: We must return idCustomer from response body
+		Name:           "John Lock",
+		UniqueClientID: customer.UniqueClientID,
+	}
+
+	return output, nil
 }
