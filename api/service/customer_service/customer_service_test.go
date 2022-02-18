@@ -1,4 +1,4 @@
-package service
+package customer_service
 
 import (
 	"testing"
@@ -16,10 +16,11 @@ func TestCustomerService(t *testing.T) {
 	customer.UniqueClientID = 122
 	customer.Source = 1
 
-	expectedOut := CustomerServiceOutput{
+	expectedOut := CustomerProcessed{
 		IdCustomer:     1,
 		Name:           "John Lock",
 		UniqueClientID: customer.UniqueClientID,
+		Source:         1,
 	}
 
 	httpMock := http_protocol.NewHttpClientMock()

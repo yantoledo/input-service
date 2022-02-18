@@ -1,4 +1,4 @@
-package service
+package customer_service
 
 import (
 	"github.com/yantoledo/input-service/api/entity/customer"
@@ -11,6 +11,6 @@ func NewCustomerServiceMock() *CustomerServiceMock {
 	return &CustomerServiceMock{}
 }
 
-func (c *CustomerServiceMock) Insert(customer *customer.Customer) (CustomerServiceOutput, error) {
-	return CustomerServiceOutput{IdCustomer: 1, Name: "John Lock", UniqueClientID: 12345}, nil
+func (c *CustomerServiceMock) Insert(customer *customer.Customer) (CustomerProcessed, error) {
+	return CustomerProcessed{IdCustomer: 1, Name: "John Lock", UniqueClientID: 12345, Source: 1}, nil
 }

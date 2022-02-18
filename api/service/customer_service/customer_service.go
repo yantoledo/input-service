@@ -1,4 +1,4 @@
-package service
+package customer_service
 
 import (
 	"encoding/json"
@@ -16,11 +16,11 @@ func NewCustomerService(httpClient http_protocol.HttpClientInterface) *CustomerS
 	return &CustomerService{HttpClient: httpClient}
 }
 
-func (c *CustomerService) Insert(customer *customer.Customer) (CustomerServiceOutput, error) {
+func (c *CustomerService) Insert(customer *customer.Customer) (CustomerProcessed, error) {
 	body, err := json.Marshal(customer)
 
 	if err != nil {
-		return CustomerServiceOutput{}, err
+		return CustomerProcessed{}, err
 	}
 
 	res, err := c.HttpClient.Post(http_protocol.HTTPRequest{
@@ -29,13 +29,14 @@ func (c *CustomerService) Insert(customer *customer.Customer) (CustomerServiceOu
 	})
 	fmt.Println(res) //TODO: Removes after
 	if err != nil {
-		return CustomerServiceOutput{}, err
+		return CustomerProcessed{}, err
 	}
 
-	output := CustomerServiceOutput{
+	output := CustomerProcessed{
 		IdCustomer:     1,           //TODO: We must get idCustomer from response body
 		Name:           "John Lock", //TODO: We must get Name from response body
 		UniqueClientID: customer.UniqueClientID,
+		Source:         customer.Source,
 	}
 
 	return output, nil
