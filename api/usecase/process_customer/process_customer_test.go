@@ -1,4 +1,4 @@
-package usecase
+package process_customer
 
 import (
 	"testing"
@@ -18,6 +18,7 @@ func TestProcessCustomerWhenItIsValid(t *testing.T) {
 		Name:           "John Lock",
 		IdCustomer:     1,
 		UniqueClientID: 12345,
+		Source:         1,
 	}
 
 	serviceMock := service.NewCustomerServiceMock()

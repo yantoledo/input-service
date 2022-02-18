@@ -1,4 +1,4 @@
-package usecase
+package process_customer
 
 import (
 	"errors"
@@ -38,6 +38,7 @@ func (p *ProcessCustomer) Execute(input CustomerDtoInput) (CustomerDtoOutput, er
 		IdCustomer:     service_response.IdCustomer,
 		Name:           service_response.Name,
 		UniqueClientID: service_response.UniqueClientID,
+		Source:         service_response.Source,
 	}
 
 	return dtoOutput, nil
