@@ -3,14 +3,14 @@ package message
 import (
 	"errors"
 
-	"github.com/yantoledo/input-service/api/entity/customer"
+	"github.com/yantoledo/input-service/api/service/customer_service"
 )
 
 type Message struct {
 	Text     string
 	Type     string
 	MediaUrl string
-	Customer customer.Customer
+	Customer customer_service.CustomerProcessed
 }
 
 func NewMessage() *Message {
