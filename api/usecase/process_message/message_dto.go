@@ -1,19 +1,19 @@
-package usecase
+package process_message
 
 import (
-	service "github.com/yantoledo/input-service/api/service/customer_service"
+	"github.com/yantoledo/input-service/api/usecase/process_customer"
 )
 
 type MessageDtoInput struct {
-	Text     string                    `json:"text"`
-	Type     string                    `json:"type"`
-	MediaUrl string                    `json:"midia_url"`
-	Customer service.CustomerProcessed `json:"customer"`
+	Text     string                             `json:"text"`
+	Type     string                             `json:"type"`
+	MediaUrl string                             `json:"midia_url"`
+	Customer process_customer.CustomerDtoOutput `json:"customer"`
 }
 
 type MessageDtoOutput struct {
-	Text     string                    `json:"text"`
-	Type     string                    `json:"type"`
-	MediaUrl string                    `json:"midia_url"`
-	Customer service.CustomerProcessed `json:"customer"`
+	Text     string                             `json:"text"`
+	Type     string                             `json:"type"`
+	MediaUrl string                             `json:"midia_url"`
+	Customer process_customer.CustomerDtoOutput `json:"customer"`
 }

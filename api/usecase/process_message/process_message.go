@@ -1,4 +1,4 @@
-package usecase
+package process_message
 
 import (
 	"errors"
@@ -23,13 +23,13 @@ func (p *ProcessMessage) Execute(input MessageDtoInput) (MessageDtoOutput, error
 	message.MediaUrl = input.MediaUrl
 	message.Customer = input.Customer
 
-	invalidMessage := message.IsValid()
+	err := message.IsValid()
 
-	if invalidMessage != nil {
+	if err != nil {
 		return MessageDtoOutput{}, errors.New("Invalid message")
 	}
 
-	err := p.Service.Publish(message)
+	err = p.Service.Publish(message)
 	if err != nil {
 		return MessageDtoOutput{}, errors.New("Publish message error")
 	}

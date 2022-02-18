@@ -1,15 +1,16 @@
-package usecase
+package process_message
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/yantoledo/input-service/api/service/customer_service"
 	service "github.com/yantoledo/input-service/api/service/message_service"
+	"github.com/yantoledo/input-service/api/usecase/process_customer"
+	"github.com/yantoledo/input-service/infra/message_broker"
 )
 
 func TestProcessMessageWhenItIsValid(t *testing.T) {
-	customer := customer_service.CustomerProcessed{
+	customer := process_customer.CustomerDtoOutput{
 		IdCustomer:     1,
 		Name:           "John Lock",
 		UniqueClientID: 1234,
@@ -30,7 +31,9 @@ func TestProcessMessageWhenItIsValid(t *testing.T) {
 		Customer: customer,
 	}
 
-	serviceMock := service.NewMessageServiceMock()
+	brokerMock := message_broker.NewBrokerClientMock()
+
+	serviceMock := service.NewMessageServiceMock(brokerMock)
 
 	usecase := NewProcessMessage(serviceMock)
 	output, err := usecase.Execute(input)
