@@ -6,15 +6,15 @@ import (
 	"net/http"
 )
 
-type HttpService struct {
+type HttpClient struct {
 	http HttpClientProvider
 }
 
-func NewHttpService() HttpService {
-	return HttpService{http: &http.Client{}}
+func NewHttpClient() HttpClient {
+	return HttpClient{http: &http.Client{}}
 }
 
-func (h HttpService) Post(request HTTPRequest) (HTTPResponse, error) {
+func (h HttpClient) Post(request HTTPRequest) (HTTPResponse, error) {
 	if request.Headers == nil {
 		request.Headers = make(map[string]string)
 	}
@@ -22,7 +22,7 @@ func (h HttpService) Post(request HTTPRequest) (HTTPResponse, error) {
 	return h.processRequest("POST", request)
 }
 
-func (h HttpService) processRequest(method string, request HTTPRequest) (HTTPResponse, error) {
+func (h HttpClient) processRequest(method string, request HTTPRequest) (HTTPResponse, error) {
 	httpRequest, err := http.NewRequest(method, request.URL, bytes.NewBuffer(request.Body))
 	if err != nil {
 		return HTTPResponse{}, err
