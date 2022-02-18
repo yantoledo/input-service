@@ -1,4 +1,4 @@
-package service
+package message_service
 
 import (
 	"github.com/yantoledo/input-service/api/entity/message"
@@ -6,6 +6,7 @@ import (
 )
 
 type MessageService struct {
+	PBClient message_broker.PublisherInterface
 }
 
 func NewMessageService() *MessageService {
@@ -15,8 +16,7 @@ func NewMessageService() *MessageService {
 func (m *MessageService) Publish(message *message.Message) error {
 	url := "https://7a3f-186-193-220-142.ngrok.io" // TODO: We must get the url from a env variable in config file
 
-	messageBroker := message_broker.NewPublisher()
-	err := messageBroker.Publish(url, message)
+	err := m.PBClient.Publish(url, message)
 
 	if err != nil {
 		return err

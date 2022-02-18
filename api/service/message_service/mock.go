@@ -1,4 +1,4 @@
-package service
+package message_service
 
 import "github.com/yantoledo/input-service/api/entity/message"
 
