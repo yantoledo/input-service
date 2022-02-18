@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -11,8 +10,10 @@ import (
 	event "github.com/yantoledo/input-service/api/entity/facebook_events"
 	service "github.com/yantoledo/input-service/api/service/customer_service"
 	"github.com/yantoledo/input-service/api/service/message_service"
-	usecase "github.com/yantoledo/input-service/api/usecase/process_customer"
+	"github.com/yantoledo/input-service/api/usecase/process_customer"
+	"github.com/yantoledo/input-service/api/usecase/process_message"
 	"github.com/yantoledo/input-service/infra/http_protocol"
+	"github.com/yantoledo/input-service/infra/message_broker"
 )
 
 func MessageEventFromFacebook(w http.ResponseWriter, r *http.Request) {
@@ -29,7 +30,7 @@ func MessageEventFromFacebook(w http.ResponseWriter, r *http.Request) {
 
 	httpClient := http_protocol.NewHttpClient()
 	customerService := service.NewCustomerService(httpClient)
-	customerUseCase := usecase.NewProcessCustomer(customerService)
+	customerUseCase := process_customer.NewProcessCustomer(customerService)
 
 	uniqueID, err := strconv.Atoi(event.Entry[0].Messaging[0].Sender.ID)
 
@@ -42,16 +43,32 @@ func MessageEventFromFacebook(w http.ResponseWriter, r *http.Request) {
 		log.Panic(err)
 	}
 
-	customerProcessed, err := customerUseCase.Execute(usecase.CustomerDtoInput{UniqueID: uniqueID, UniqueClientID: uniqueClientID, Source: 1})
+	customerProcessed, err := customerUseCase.Execute(process_customer.CustomerDtoInput{
+		UniqueID:       uniqueID,
+		UniqueClientID: uniqueClientID,
+		Source:         1,
+	})
 	if err != nil {
 		log.Panic(err)
 	}
 
-	messageService := message_service.NewMessageService()
+	BrokerClient := message_broker.NewBrokerClient()
 
-	messageService.Execute()
+	messageService := message_service.NewMessageService(BrokerClient)
 
-	fmt.Println(event)
+	messageUseCase := process_message.NewProcessMessage(messageService)
+	out, err := messageUseCase.Execute(process_message.MessageDtoInput{
+		Text:     event.Entry[0].Messaging[0].Message.Text,
+		Type:     "text",
+		MediaUrl: "",
+		Customer: customerProcessed,
+	})
+
+	if err != nil {
+		log.Panic(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(out)
 
 }
 
