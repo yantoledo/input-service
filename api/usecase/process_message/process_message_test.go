@@ -4,32 +4,36 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/yantoledo/input-service/entity/customer"
-	service "github.com/yantoledo/input-service/infra/service/message_service"
+	service "github.com/yantoledo/input-service/api/service/message_service"
+	"github.com/yantoledo/input-service/api/usecase/process_customer"
+	"github.com/yantoledo/input-service/infra/message_broker"
 )
 
 func TestProcessMessageWhenItIsValid(t *testing.T) {
-	customer := customer.NewCustomer()
-	customer.Name = "John Lock"
-	customer.UniqueID = 1234
-	customer.UniqueClientID = 1234
-	customer.Source = 1
+	customer := process_customer.CustomerDtoOutput{
+		IdCustomer:     1,
+		Name:           "John Lock",
+		UniqueClientID: 1234,
+		Source:         1,
+	}
 
 	input := MessageDtoInput{
 		Text:     "Hi",
 		Type:     "Text",
 		MediaUrl: "https://www.url.com",
-		Customer: *customer,
+		Customer: customer,
 	}
 
 	expectedOutput := MessageDtoOutput{
 		Text:     "Hi",
 		Type:     "Text",
 		MediaUrl: "https://www.url.com",
-		Customer: *customer,
+		Customer: customer,
 	}
 
-	serviceMock := service.NewMessageServiceMock()
+	brokerMock := message_broker.NewBrokerClientMock()
+
+	serviceMock := service.NewMessageServiceMock(brokerMock)
 
 	usecase := NewProcessMessage(serviceMock)
 	output, err := usecase.Execute(input)

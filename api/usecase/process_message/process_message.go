@@ -3,8 +3,8 @@ package process_message
 import (
 	"errors"
 
-	"github.com/yantoledo/input-service/entity/message"
-	service "github.com/yantoledo/input-service/infra/service/message_service"
+	"github.com/yantoledo/input-service/api/entity/message"
+	service "github.com/yantoledo/input-service/api/service/message_service"
 )
 
 type ProcessMessage struct {
@@ -23,13 +23,13 @@ func (p *ProcessMessage) Execute(input MessageDtoInput) (MessageDtoOutput, error
 	message.MediaUrl = input.MediaUrl
 	message.Customer = input.Customer
 
-	invalidMessage := message.IsValid()
+	err := message.IsValid()
 
-	if invalidMessage != nil {
+	if err != nil {
 		return MessageDtoOutput{}, errors.New("Invalid message")
 	}
 
-	err := p.Service.Publish(message)
+	err = p.Service.Publish(message)
 	if err != nil {
 		return MessageDtoOutput{}, errors.New("Publish message error")
 	}
