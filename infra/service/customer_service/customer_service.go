@@ -9,10 +9,11 @@ import (
 )
 
 type CustomerService struct {
+	HttpClient http_protocol.HttpClientInterface
 }
 
-func NewCustomerService() *CustomerService {
-	return &CustomerService{}
+func NewCustomerService(httpClient http_protocol.HttpClientInterface) *CustomerService {
+	return &CustomerService{HttpClient: httpClient}
 }
 
 func (c *CustomerService) Insert(customer *customer.Customer) (CustomerServiceOutput, error) {
@@ -22,9 +23,7 @@ func (c *CustomerService) Insert(customer *customer.Customer) (CustomerServiceOu
 		return CustomerServiceOutput{}, err
 	}
 
-	httpService := http_protocol.NewHttpService()
-
-	res, err := httpService.Post(http_protocol.HTTPRequest{
+	res, err := c.HttpClient.Post(http_protocol.HTTPRequest{
 		URL:  "https://69fc-186-193-220-142.ngrok.io", // TODO: We must get the url from an env variable in config file
 		Body: body,
 	})
@@ -34,8 +33,8 @@ func (c *CustomerService) Insert(customer *customer.Customer) (CustomerServiceOu
 	}
 
 	output := CustomerServiceOutput{
-		IdCustomer:     1, //TODO: We must return idCustomer from response body
-		Name:           "John Lock",
+		IdCustomer:     1,           //TODO: We must get idCustomer from response body
+		Name:           "John Lock", //TODO: We must get Name from response body
 		UniqueClientID: customer.UniqueClientID,
 	}
 
