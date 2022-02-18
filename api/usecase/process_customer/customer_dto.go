@@ -1,4 +1,4 @@
-package usecase
+package process_customer
 
 type CustomerDtoInput struct {
 	UniqueID       int `json:"unique_id"`
@@ -7,7 +7,8 @@ type CustomerDtoInput struct {
 }
 
 type CustomerDtoOutput struct {
-	IdCustomer     int    `json:"unique_id"`
+	IdCustomer     int    `json:"id_customer"`
 	Name           string `json:"name"`
 	UniqueClientID int    `json:"unique_client_id"`
+	Source         int    `json:"source"`
 }
