@@ -24,21 +24,13 @@ func TestProcessMessageWhenItIsValid(t *testing.T) {
 		Customer: customer,
 	}
 
-	expectedOutput := MessageDtoOutput{
-		Text:     "Hi",
-		Type:     "Text",
-		MediaUrl: "https://www.url.com",
-		Customer: customer,
-	}
-
 	brokerMock := message_broker.NewBrokerClientMock()
 
 	serviceMock := service.NewMessageServiceMock(brokerMock)
 
 	usecase := NewProcessMessage(serviceMock)
-	output, err := usecase.Execute(input)
+	err := usecase.Execute(input)
 
 	assert.Nil(t, err)
-	assert.Equal(t, expectedOutput, output)
 
 }

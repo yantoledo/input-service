@@ -1,8 +1,6 @@
 package process_message
 
 import (
-	"errors"
-
 	"github.com/yantoledo/input-service/api/entity/message"
 	service "github.com/yantoledo/input-service/api/service/message_service"
 )
@@ -15,7 +13,7 @@ func NewProcessMessage(service service.MessageServiceInterface) *ProcessMessage 
 	return &ProcessMessage{Service: service}
 }
 
-func (p *ProcessMessage) Execute(input MessageDtoInput) (MessageDtoOutput, error) {
+func (p *ProcessMessage) Execute(input MessageDtoInput) error {
 
 	message := message.NewMessage()
 	message.Text = input.Text
@@ -26,20 +24,13 @@ func (p *ProcessMessage) Execute(input MessageDtoInput) (MessageDtoOutput, error
 	err := message.IsValid()
 
 	if err != nil {
-		return MessageDtoOutput{}, errors.New("Invalid message")
+		return err
 	}
 
 	err = p.Service.Publish(message)
 	if err != nil {
-		return MessageDtoOutput{}, errors.New("Publish message error")
+		return err
 	}
 
-	output := MessageDtoOutput{
-		Text:     message.Text,
-		Type:     message.Type,
-		MediaUrl: message.MediaUrl,
-		Customer: message.Customer,
-	}
-
-	return output, nil
+	return nil
 }
