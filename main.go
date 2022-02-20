@@ -1,13 +1,8 @@
 package main
 
-import (
-	"fmt"
-
-	"github.com/yantoledo/input-service/api/routes.go"
-)
+import "github.com/yantoledo/input-service/api"
 
 func main() {
-
-	fmt.Println("Initialiazing server..")
-	routes.HandleRequest()
+	app := api.NewApp()
+	app.Run()
 }
